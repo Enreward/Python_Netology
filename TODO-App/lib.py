@@ -1,6 +1,15 @@
 # coding: utf-8
+import random
+
 
 list_tasks = {}
+random_tasks = [
+    'Прочесть одну главу книги по программированию',
+    'Отжаться 50 раз',
+    'Приготовить лазанью',
+    'Пойти в бассей',
+    'Пробежать 5 км'
+]
 
 
 def input_date():
@@ -20,32 +29,46 @@ def get_commands():
         'Помощь': print_help,
         'Добавить': add_task,
         'Дела': print_tasks,
+        'Что поделать?': add_random_task,
         'Выход': exit_app
     }
 
 
-def print_tasks():
-    text = ''
-    for date in list_tasks.keys():
-        text += f'{date}:'
-        for task in list_tasks[date]:
-            text += f'\n"{task}"'
-        text += '\n'
-    if text:
-        print(text)
-    else:
-        print('Список дел пуст.')
+def print_tasks(_date=''):
+    if not list_tasks:
+        print('Список дел пуст!')
+        return True
+
+    while not _date:
+        _date = input_date()
+
+    if _date not in list_tasks:
+        print(f'На {_date} дел нет.')
+        return True
+
+    text = f'На {_date}:\n'
+    for _task in list_tasks[_date]:
+        text += f'"{_task}"\n'
+    print(text)
     return True
 
 
-def add_task():
-    _date = input_date()
-    _task = input_task()
+def add_task(_date='', _task=''):
+    if not _date:
+        _date = input_date()
+        _task = input_task()
     if _date in list_tasks:
         list_tasks[_date].append(_task)
     else:
         list_tasks[_date] = [_task]
     print('Задание добавлено.\n')
+    return True
+
+
+def add_random_task():
+    random_task = random.choice(random_tasks)
+    add_task('Сегодня', random_task)
+    print_tasks('Сегодня')
     return True
 
 

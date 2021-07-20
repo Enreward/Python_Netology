@@ -9,4 +9,4 @@ while run:
     if command in list_commands.keys():
         run = list_commands[command]()
     else:
-        run = exit_app('Неизвестная команда!')
+        print('Неизвестная команда!\n')
