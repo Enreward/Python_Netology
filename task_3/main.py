@@ -1,9 +1,9 @@
 # coding: utf-8
 import telebot
 
-TOKEN = '1932491823:AAF2nCsRuctL4kFpb7rMi4NPFzogoC-WejA'
+# TOKEN = '1932491823:AAF2nCsRuctL4kFpb7rMi4NPFzogoC-WejA'
 
-bot = telebot.TeleBot(TOKEN)    # Создание объекта класса TeleBot
+bot = telebot.TeleBot(TOKEN)    # Создание объекта класса ToDoApp_TeleBot
 
 
 @bot.message_handler(content_types=["text"])

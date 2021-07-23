@@ -1,5 +1,6 @@
 # coding: utf-8
 import random
+import datetime
 
 
 list_tasks = {}
@@ -12,66 +13,52 @@ random_tasks = [
 ]
 
 
-def input_date():
-    return input("Введите дату: ")
-
-
-def input_task():
-    return input("Введите задачу: ")
-
-
-def input_command():
-    return input("Введите команду: ")
-
-
 def get_commands():
     return {
         'Помощь': print_help,
         'Добавить': add_task,
         'Дела': print_tasks,
         'Что поделать?': add_random_task,
-        'Выход': exit_app
     }
 
 
-def print_tasks(_date=''):
+def print_tasks(*arg, _date=''):
     if not list_tasks:
         return 'Список дел пуст!'
 
-    while not _date:
-        _date = input_date()
+    # while not _date:
+    #     _date = get_date
 
     if _date not in list_tasks:
-        print(f'На {_date} дел нет.')
-        return True
+        return f'На {_date} дел нет.'
 
-    text = f'На {_date}:\n'
+    text = f'На {_date}:'
     for _task in list_tasks[_date]:
-        text += f'"{_task}"\n'
-    print(text)
-    return True
+        text += f'\n"{_task}"'
+    return text
 
 
-def add_task(_date='', _task=''):
+def add_task(*arg, _date='', _task=''):
+    _data = arg[0]
     if not _date:
-        _date = input_date()
-        _task = input_task()
+        arg[1].send_message(_data.chat.id, "Введите дату: ")
+        _date = get_date()
+        arg[1].send_message(_data.chat.id, "Введите задачу: ")
+        _task = get_task()
     if _date in list_tasks:
         list_tasks[_date].append(_task)
     else:
         list_tasks[_date] = [_task]
-    print('Задание добавлено.\n')
-    return True
+    return 'Задание добавлено.'
 
 
-def add_random_task():
+def add_random_task(*arg):
     random_task = random.choice(random_tasks)
-    add_task('Сегодня', random_task)
-    print_tasks('Сегодня')
-    return True
+    add_task(_date='Сегодня', _task=random_task)
+    return print_tasks(_date='Сегодня')
 
 
-def print_help():
+def print_help(*arg):
     help_text = '''
 Доступные команды:
 Помощь - выводит список команд
@@ -79,10 +66,15 @@ def print_help():
 Дела - выводит список дел
 Выход - заканчивает работу программы
 '''
-    print(help_text)
-    return True
+    return help_text
 
 
-def exit_app(text='Спасибо за использование! До свидания!'):
-    print(text)
-    return False
+@bot.message_handler(content_types=["text"])
+def get_date(_data):
+    date = datetime.datetime.strptime(_data.text, "%d.%m.%Y")
+    return date
+
+
+@bot.message_handler(content_types=["text"])
+def get_task(_data):
+    return _data.text
