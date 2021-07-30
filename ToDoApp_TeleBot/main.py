@@ -16,12 +16,6 @@ random_tasks = [
     'Пробежать 5 км'
 ]
 
-button_list = [
-    telegram.InlineKeyboardButton("col1", callback_data=...),
-    InlineKeyboardButton("col2", callback_data=...),
-    InlineKeyboardButton("row 2", callback_data=...)
-]
-
 
 @bot.message_handler(commands=['Добавить'])
 def get_date(message):
